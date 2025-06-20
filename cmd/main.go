@@ -10,7 +10,7 @@ import (
 func main() {
 	e := echo.New()
 	env := config.InitEnvVariables()
-	db := config.InitDB()
+	db := config.InitDB(env)
 
 	diContainer := config.NewDIContainer(
 		e,
