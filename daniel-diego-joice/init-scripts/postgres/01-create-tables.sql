@@ -1,10 +1,9 @@
--- Script de inicialização PostgreSQL
 
 -- Tabela de pacientes
 CREATE TABLE patient (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    email VARCHAR(150) UNIQUE NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL
 );
 
 -- Tabela de consultas
