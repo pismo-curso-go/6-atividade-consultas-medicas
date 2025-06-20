@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"os"
 )
 
 const (
@@ -12,13 +11,13 @@ const (
 	errDatabaseInvalidConnectionMessage = "Erro na validação da conexão com o banco de dados"
 )
 
-func InitDB() *sql.DB {
+func InitDB(env *EnvVariables) *sql.DB {
 	strConn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_PORT"))
+		env.db.host,
+		env.db.user,
+		env.db.password,
+		env.db.name,
+		env.db.port)
 
 	database, err := sql.Open("postgres", strConn)
 
