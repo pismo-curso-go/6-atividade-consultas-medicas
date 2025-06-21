@@ -32,9 +32,14 @@ func Load() (*Config, error) {
 	// Load .env file if it exists
 	godotenv.Load()
 
+	dbHost := "localhost"
+	if os.Getenv("DOCKER_ENV") == "true" {
+		dbHost = "postgres"
+	}
+
 	config := &Config{
 		Database: DatabaseConfig{
-			Host:     getEnv("DB_HOST", "localhost"),
+			Host:     getEnv("DB_HOST", dbHost),
 			Port:     getEnv("DB_PORT", "5432"),
 			User:     getEnv("DB_USER", "postgres"),
 			Password: getEnv("DB_PASSWORD", "postgres"),
