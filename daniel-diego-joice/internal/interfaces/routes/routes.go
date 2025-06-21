@@ -1,0 +1,23 @@
+package routes
+
+import (
+	"saude-mais/internal/interfaces/handlers"
+	"saude-mais/internal/interfaces/middleware"
+
+	"github.com/labstack/echo/v4"
+)
+
+func InitRoutes(
+	e *echo.Echo,
+	patientHandler *handlers.PatientHandler,
+	jwtSecret string,
+) {
+	// Public routes
+	e.POST("/register", patientHandler.Register)
+	e.POST("/login", patientHandler.Login)
+
+	// Protected routes
+	protected := e.Group("")
+	protected.Use(middleware.JWTMiddleware(jwtSecret))
+
+}
