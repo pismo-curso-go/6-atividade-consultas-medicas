@@ -1,3 +1,3 @@
 package controller
 
-// Implement
+type AppointmentController struct{}
