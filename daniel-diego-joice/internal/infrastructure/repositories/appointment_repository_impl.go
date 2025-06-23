@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"database/sql"
+	"log"
 	"saude-mais/internal/domain/entities"
 	"saude-mais/internal/domain/repositories"
 )
@@ -15,7 +16,23 @@ func NewAppointmentRepository(db *sql.DB) repositories.AppointmentRepository {
 	return &appointmentRepositoryImpl{db: db}
 }
 
-func (r *appointmentRepositoryImpl) Create(ctx context.Context, patient *entities.Appointment) error {
+func (r *appointmentRepositoryImpl) Create(ctx context.Context, appointment *entities.Appointment) error {
+	query := `
+		INSERT INTO appointment (patient_id, date_time)
+		VALUES ($1, $2)
+		RETURNING id
+		`
+	err := r.db.QueryRowContext(
+		ctx,
+		query,
+		appointment.PatientID,
+		appointment.DateTime,
+	).Scan(&appointment.ID)
+
+	if err != nil {
+		log.Printf("Erro ao criar consulta: %v", err)
+		return err
+	}
 
 	return nil
 }
