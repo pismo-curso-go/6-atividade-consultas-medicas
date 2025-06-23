@@ -10,20 +10,12 @@ func NewPatientDomain(
 	name string,
 	email string,
 	password string,
-) (*PatientDomain, error) {
-	if name == "" {
-		return nil, ErrPatientInvalidName
-	}
-
-	if email == "" {
-		return nil, ErrPatientInvalidEmail
-	}
-
+) *PatientDomain {
 	return &PatientDomain{
 		name:     name,
 		email:    email,
 		password: password,
-	}, nil
+	}
 }
 
 func (p *PatientDomain) Name() string {
@@ -36,4 +28,20 @@ func (p *PatientDomain) Email() string {
 
 func (p *PatientDomain) Password() string {
 	return p.password
+}
+
+func (p *PatientDomain) Validate() error {
+	if p.name == "" {
+		return ErrPatientInvalidName
+	}
+
+	if p.email == "" {
+		return ErrPatientInvalidEmail
+	}
+
+	if p.password == "" {
+		return ErrPatientInvalidPassword
+	}
+
+	return nil
 }
