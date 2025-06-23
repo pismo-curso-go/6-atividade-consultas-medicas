@@ -7,6 +7,6 @@
 [] - Cadastro de pacientes - {Paulo}
 
 ## Consultas
-[] - Listar consultas - {nome}
+[] - Listar consultas - {Paulo}
 [] - Agendar consulta - {Paulo}
 [] - Cancelar consulta - {nome}
