@@ -4,9 +4,9 @@
 [] - Login - {nome}
 
 ## Pacientes
-[] - Cadastro de pacientes - {nome}
+[] - Cadastro de pacientes - {Paulo}
 
 ## Consultas
 [] - Listar consultas - {nome}
-[] - Agendar consulta - {nome}
+[] - Agendar consulta - {Paulo}
 [] - Cancelar consulta - {nome}
