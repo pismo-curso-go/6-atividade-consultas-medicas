@@ -2,17 +2,12 @@ package controller
 
 import (
 	"healthclinic/config"
+	"healthclinic/internal/patients/dto"
 	"healthclinic/internal/patients/usecase"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
-
-type RegisterPatientRequest struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
 
 type PatientController struct {
 	useCases *usecase.PatientUseCase
@@ -24,7 +19,7 @@ func NewPatientController(useCase *usecase.PatientUseCase) *PatientController {
 	}
 }
 func (p *PatientController) RegisterPacient(c echo.Context) error {
-	var payload RegisterPatientRequest
+	var payload dto.RegisterPatientRequest
 	if err := c.Bind(&payload); err != nil {
 		return err
 	}
