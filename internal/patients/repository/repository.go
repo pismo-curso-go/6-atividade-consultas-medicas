@@ -20,7 +20,7 @@ func NewPatientRepository(db *sql.DB) *PatientRepository {
 func (r *PatientRepository) Save(ctx context.Context, patient *patients.PatientDomain) error {
 	query := `
 		INSERT INTO patients (name, email, password)
-		VALUES ($1, $2, $3, $4)
+		VALUES ($1, $2, $3)
 	`
 
 	_, err := r.db.ExecContext(ctx, query, patient.Name(), patient.Email(), patient.Password())
