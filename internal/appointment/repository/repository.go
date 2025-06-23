@@ -3,9 +3,10 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"healthclinic/internal/appointment"
 	"time"
+
+	"github.com/labstack/gommon/log"
 )
 
 type AppointmentEntity struct {
@@ -32,7 +33,8 @@ func (r *AppointmentRepository) Save(ctx context.Context, data *appointment.Appo
 
 	_, err := r.db.ExecContext(ctx, query, data.PatientID(), data.Date())
 	if err != nil {
-		return errors.New("database error while trying to save new patient")
+		log.Error(err)
+		return ErrFailedQueryExec
 	}
 
 	return nil
@@ -47,7 +49,8 @@ func (r *AppointmentRepository) ListByPatientID(ctx context.Context, patientID i
 
 	rows, err := r.db.QueryContext(ctx, query, patientID)
 	if err != nil {
-		return nil, errors.New("database err - 1")
+		log.Error(err)
+		return nil, ErrFailedQueryExec
 	}
 	defer rows.Close()
 
@@ -59,13 +62,13 @@ func (r *AppointmentRepository) ListByPatientID(ctx context.Context, patientID i
 			&a.PatientID,
 			&a.Date,
 		); err != nil {
-			return nil, errors.New("database err - 2")
+			return nil, ErrFailedRowScan
 		}
 		appointments = append(appointments, a)
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, errors.New("database err - 3")
+		return nil, ErrInvalidIteration
 	}
 
 	return appointments, nil

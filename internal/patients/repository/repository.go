@@ -3,8 +3,9 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"healthclinic/internal/patients"
+
+	"github.com/labstack/gommon/log"
 )
 
 type PatientRepository struct {
@@ -25,7 +26,8 @@ func (r *PatientRepository) Save(ctx context.Context, data *patients.PatientDoma
 
 	_, err := r.db.ExecContext(ctx, query, data.Name(), data.Email(), data.Password())
 	if err != nil {
-		return errors.New("database error while trying to save new patient")
+		log.Error(err)
+		return ErrFailedQueryExec
 	}
 
 	return nil
