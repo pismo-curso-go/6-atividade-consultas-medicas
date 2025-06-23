@@ -1,6 +1,7 @@
 package patients
 
 type PatientDomain struct {
+	id       int
 	name     string
 	email    string
 	password string
@@ -16,6 +17,10 @@ func NewPatientDomain(
 		email:    email,
 		password: password,
 	}
+}
+
+func (p *PatientDomain) ID() int {
+	return p.id
 }
 
 func (p *PatientDomain) Name() string {
