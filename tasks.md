@@ -4,7 +4,8 @@
 [] - Login - {nome}
 
 ## Pacientes
-[] - Cadastro de pacientes - {Paulo}
+[X] - Cadastro de pacientes - {Paulo}
+    [] - Hash de senha
 
 ## Consultas
 [] - Listar consultas - {Paulo}
