@@ -31,4 +31,14 @@ var (
 		Message: "Dados de entrada inválidos",
 		Code:    http.StatusBadRequest,
 	}
+
+	ErrInvalidDateTime = APIError{
+		Message: "Data e hora inválidas",
+		Code:    http.StatusBadRequest,
+	}
+
+	ErrDateTimeBefore = APIError{
+		Message: "Data e hora devem ser no futuro",
+		Code:    http.StatusBadRequest,
+	}
 )
