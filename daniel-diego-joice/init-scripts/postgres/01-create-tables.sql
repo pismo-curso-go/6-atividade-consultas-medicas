@@ -18,10 +18,10 @@ CREATE TABLE appointment (
 );
 
 -- Inserindo dados de exemplo na tabela de pacientes
-INSERT INTO patient (name, email) VALUES 
-('Alice Silva', 'alice.silva@example.com'),
-('Bruno Costa', 'bruno.costa@example.com'),
-('Carla Mendes', 'carla.mendes@example.com');
+INSERT INTO patient (name, email, password) VALUES 
+('Alice Silva', 'alice.silva@example.com', '12345'),
+('Bruno Costa', 'bruno.costa@example.com', '12345'),
+('Carla Mendes', 'carla.mendes@example.com', '12345');
 
 -- Inserindo dados de exemplo na tabela de consultas
 INSERT INTO appointment (patient_id, date_time) VALUES 
