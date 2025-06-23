@@ -5,9 +5,9 @@
 
 ## Pacientes
 [X] - Cadastro de pacientes - {Paulo}
-    [] - Hash de senha
+    [X] - Hash de senha
 
 ## Consultas
-[] - Listar consultas - {Paulo}
-[] - Agendar consulta - {Paulo}
+[X] - Listar consultas - {Paulo}
+[X] - Agendar consulta - {Paulo}
 [] - Cancelar consulta - {nome}
