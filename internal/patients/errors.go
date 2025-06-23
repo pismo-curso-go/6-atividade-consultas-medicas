@@ -3,7 +3,8 @@ package patients
 import "errors"
 
 var (
-	ErrPatientInvalidName     = errors.New("nome do paciente nao pode ficar em branco")
-	ErrPatientInvalidEmail    = errors.New("email do paciente nao pode ficar em branco")
-	ErrPatientInvalidPassword = errors.New("senha do paciente nao pode ficar em branco")
+	ErrPatientBlankName       = errors.New("nome do paciente nao pode ficar em branco")
+	ErrPatientBlankEmail      = errors.New("email do paciente nao pode ficar em branco")
+	ErrPatientBlankPassword   = errors.New("senha do paciente nao pode ficar em branco")
+	ErrPatientInvalidPassword = errors.New("as credenciais do paciente nao puderam ser processadas")
 )

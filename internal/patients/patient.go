@@ -37,15 +37,15 @@ func (p *PatientDomain) Password() string {
 
 func (p *PatientDomain) Validate() error {
 	if p.name == "" {
-		return ErrPatientInvalidName
+		return ErrPatientBlankName
 	}
 
 	if p.email == "" {
-		return ErrPatientInvalidEmail
+		return ErrPatientBlankEmail
 	}
 
 	if p.password == "" {
-		return ErrPatientInvalidPassword
+		return ErrPatientBlankPassword
 	}
 
 	return nil
