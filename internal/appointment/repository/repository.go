@@ -42,10 +42,10 @@ func (r *AppointmentRepository) ListByPatientID(ctx context.Context, patientID i
 	query := `
 		SELECT id, patient_id, date
 		FROM appointments
-		WHERE appointments.id = $1
+		WHERE appointments.patient_id = $1
 	`
 
-	rows, err := r.db.QueryContext(ctx, query)
+	rows, err := r.db.QueryContext(ctx, query, patientID)
 	if err != nil {
 		return nil, errors.New("database err - 1")
 	}

@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"healthclinic/internal/appointment"
+	"healthclinic/internal/appointment/dto"
 	"healthclinic/internal/appointment/repository"
 	"time"
 )
@@ -17,16 +18,20 @@ func NewAppointmentUseCase(repo *repository.AppointmentRepository) *AppointmentU
 	}
 }
 
-func (a *AppointmentUseCase) ListByPatientID(ctx context.Context, patientID int) ([]appointment.AppointmentDomain, error) {
+func (a *AppointmentUseCase) ListByPatientID(ctx context.Context, patientID int) ([]dto.AppointmentResponse, error) {
 	appointments, err := a.repository.ListByPatientID(ctx, patientID)
 	if err != nil {
 		return nil, err
 	}
 
-	appointmentList := []appointment.AppointmentDomain{}
+	appointmentList := []dto.AppointmentResponse{}
 	for _, aEntity := range appointments {
-		aDomain, _ := appointment.NewAppointmentDomain(aEntity.ID, aEntity.Date, aEntity.PatientID)
-		appointmentList = append(appointmentList, *aDomain)
+		res := dto.AppointmentResponse{
+			ID:        aEntity.ID,
+			PatientID: aEntity.PatientID,
+			Date:      aEntity.Date,
+		}
+		appointmentList = append(appointmentList, res)
 	}
 	return appointmentList, nil
 }

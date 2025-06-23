@@ -12,7 +12,7 @@ type AppointmentDomain struct {
 
 func NewAppointmentDomain(id int, date time.Time, patientID int) (*AppointmentDomain, error) {
 	currentDatetime := time.Now()
-	if time.Now().Compare(currentDatetime) >= 0 {
+	if currentDatetime.Compare(date) >= 0 {
 		return nil, ErrAppointmentInvalidDate
 	}
 
