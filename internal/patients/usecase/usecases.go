@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"healthclinic/config"
 	"healthclinic/internal/patients"
 	"healthclinic/internal/patients/repository"
 )
@@ -17,6 +18,14 @@ func NewPatientUseCase(repo *repository.PatientRepository) *PatientUseCase {
 }
 
 func (p *PatientUseCase) CreatePatientUseCase(ctx context.Context, name, password, email string) error {
+	if password != "" {
+		hashedPw, err := config.HashStr(password)
+		if err != nil {
+			return patients.ErrPatientInvalidPassword
+		}
+		password = hashedPw
+	}
+
 	newPatient := patients.NewPatientDomain(name, email, password)
 	if err := newPatient.Validate(); err != nil {
 		return err
