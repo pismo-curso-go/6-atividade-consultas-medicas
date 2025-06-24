@@ -28,7 +28,7 @@ var (
 	}
 
 	ErrValidationFailed = APIError{
-		Message: "Dados de entrada inválidos",
+		Message: "Falha na validação",
 		Code:    http.StatusBadRequest,
 	}
 
@@ -40,5 +40,20 @@ var (
 	ErrDateTimeBefore = APIError{
 		Message: "Data e hora devem ser no futuro",
 		Code:    http.StatusBadRequest,
+	}
+
+	ErrPastAppointment = APIError{
+		Message: "Consulta no passado não é permitida",
+		Code:    http.StatusBadRequest,
+	}
+
+	ErrAppointmentConflict = APIError{
+		Message: "Paciente já possui uma consulta nesse horário",
+		Code:    http.StatusConflict,
+	}
+
+	ErrInternalServer = APIError{
+		Message: "Erro interno do servidor",
+		Code:    http.StatusInternalServerError,
 	}
 )

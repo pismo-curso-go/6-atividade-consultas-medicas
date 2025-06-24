@@ -10,22 +10,18 @@ import (
 func InitRoutes(
 	e *echo.Echo,
 	patientHandler *handlers.PatientHandler,
+	appointmentHandler *handlers.AppointmentHandler,
 	jwtSecret string,
 ) {
-	// Public routes
 	e.POST("/register", patientHandler.Register)
 	e.POST("/login", patientHandler.Login)
 
-	// Protected routes
 	protected := e.Group("")
 	protected.Use(middleware.JWTMiddleware(jwtSecret))
 
-	
-	//protected.POST("/appointments", appointmentHandler.Create)
-	//protected.GET("/appointments", appointmentHandler.GetAll)
-	//protected.GET("/appointments/:id", appointmentHandler.GetByID)
-	//protected.PUT("/appointments/:id", appointmentHandler.Update)
-	//protected.DELETE("/appointments/:id", appointmentHandler.Delete)
-	
-
+	protected.POST("/appointments", appointmentHandler.Create)
+	protected.GET("/appointments", appointmentHandler.GetAll)
+	protected.GET("/appointments/:id", appointmentHandler.GetByID)
+	protected.PUT("/appointments/:id", appointmentHandler.Update)
+	protected.DELETE("/appointments/:id", appointmentHandler.Delete)
 }

@@ -15,53 +15,43 @@ import (
 )
 
 func main() {
-	// Load configuration
 	cfg, err := config.Load()
 	if err != nil {
 		log.Fatalf("Failed to load configuration: %v", err)
 	}
 
-	// Initialize database connection
 	db, err := database.NewPostgresConnection(cfg)
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	defer db.Close()
 
-	// Initialize repositories
 	patientRepo := repositories.NewPatientRepository(db)
-
-	// Initialize services
+	appointmentRepo := repositories.NewAppointmentRepository(db)
 	patientService := services.NewPatientService(patientRepo)
 	authService := services.NewAuthService(patientRepo, cfg.JWT.Secret)
-
-	// Initialize handlers
+	appointmentService := services.NewAppointmentService(appointmentRepo)
 	patientHandler := handlers.NewPatientHandler(patientService, authService)
+	appointmentHandler := handlers.NewAppointmentHandler(appointmentService)
 
-	// Initialize Echo
 	e := echo.New()
 
-	// Global middleware
 	e.Use(echomiddleware.Logger())
 	e.Use(echomiddleware.Recover())
 	e.Use(echomiddleware.CORS())
 
-	// Custom error handler
 	e.HTTPErrorHandler = middleware.ErrorHandler
 
-	// Setup routes
-	routes.InitRoutes(e, patientHandler, cfg.JWT.Secret)
+	routes.InitRoutes(e, patientHandler, appointmentHandler, cfg.JWT.Secret)
 
-	// Start server
 	log.Printf("Server starting on port %s", cfg.Server.Port)
 	if err := e.Start(":" + cfg.Server.Port); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 
-	// Test database connection
 	err = db.Ping()
 	if err != nil {
 		log.Fatalf("Failed to ping database: %v", err)
 	}
-	log.Println("✅ Successfully connected to database!")
+	log.Println(" Successfully connected to database!")
 }
