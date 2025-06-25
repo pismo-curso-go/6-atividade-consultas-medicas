@@ -65,8 +65,8 @@ func Register(db *sql.DB) echo.HandlerFunc {
 func Login(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var input struct {
-			Email string `json:"email"`
-			Senha string `json:"senha"`
+			Email    string `json:"email"`
+			Password string `json:"password"`  // alterado de "senha" para "password"
 		}
 
 		if err := c.Bind(&input); err != nil {
@@ -82,7 +82,7 @@ func Login(db *sql.DB) echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"erro": "Erro ao buscar usuário"})
 		}
 
-		if err := bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(input.Senha)); err != nil {
+		if err := bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(input.Password)); err != nil {
 			return c.JSON(http.StatusUnauthorized, map[string]string{"erro": "Senha incorreta"})
 		}
 

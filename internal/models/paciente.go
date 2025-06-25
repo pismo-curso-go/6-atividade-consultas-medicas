@@ -17,9 +17,9 @@ type Paciente struct {
 func CriarPaciente(db *sql.DB, nome, email, senha string) error {
 	var id int
 	err := db.QueryRow("SELECT id FROM pacientes WHERE email = $1", email).Scan(&id)
-	if err != sql.ErrNoRows && err != nil {
-		return err
-	}
+	if err != nil && err != sql.ErrNoRows {
+    return err
+}
 	if id != 0 {
 		return errors.New("Paciente já cadastrado")
 	}
