@@ -4,10 +4,10 @@ services:
   # PostgreSQL Database
   postgres:
     image: postgres:13-alpine
-    container_name: echo-clean-database
+    container_name: echo-med-database
     restart: always
     environment:
-      POSTGRES_DB: echo_clean_db
+      POSTGRES_DB: echo_med_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
@@ -17,7 +17,7 @@ services:
       - postgres_data:/var/lib/postgresql/data    
     shm_size: 256mb
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d echo_clean_db"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d echo_med_db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,7 +25,7 @@ services:
   # Adminer - Interface Web para administração
   adminer:
     image: adminer:4.8.1
-    container_name: echo_clean_adminer
+    container_name: echo_med_adminer
     restart: always
     ports:
       - "8080:8080"
