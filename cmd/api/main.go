@@ -27,7 +27,7 @@ func main() {
 	e := echo.New()
 
 	e.POST("/register", handlers.Register(db))
-	// e.POST("/login", handlers.Login(db))
+    e.POST("/login", handlers.Login(db))
 	// e.POST("/appointments", handlers.AgendarConsulta(db), middleware.Auth(db))
 
 	port := os.Getenv("PORT")
