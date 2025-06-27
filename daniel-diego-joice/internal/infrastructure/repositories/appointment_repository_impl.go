@@ -30,12 +30,8 @@ func (r *appointmentRepositoryImpl) Create(appointment *entities.Appointment) er
 	return nil
 }
 
-func (r *appointmentRepositoryImpl) GetAll(ctx context.Context) ([]*entities.Appointment, error) {
 
-	return nil, nil
-}
-
-func (r *appointmentRepositoryImpl) GetByPatientID(ctx context.Context, id int) ([]*entities.Appointment, error) {
+func (r *appointmentRepositoryImpl) GetAllByPatientID(ctx context.Context, id int) ([]*entities.Appointment, error) {
 	query := `SELECT id, patient_id, date_time FROM appointment WHERE patient_id = $1`
 
 	rows, err := r.db.QueryContext(ctx, query, id)

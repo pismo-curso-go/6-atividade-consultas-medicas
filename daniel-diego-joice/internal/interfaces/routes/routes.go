@@ -20,8 +20,7 @@ func InitRoutes(
 	protected.Use(middleware.JWTMiddleware(jwtSecret))
 
 	protected.POST("/appointments", appointmentHandler.Create)
-	protected.GET("/appointments", appointmentHandler.GetAll)
-	protected.GET("/appointments/:id", appointmentHandler.GetByID)
+	protected.GET("/appointments", appointmentHandler.GetAllAppointmentByPatientID)
 	protected.PUT("/appointments/:id", appointmentHandler.Update)
 	protected.DELETE("/appointments/:id", appointmentHandler.Delete)
 }

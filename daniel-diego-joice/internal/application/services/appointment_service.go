@@ -19,7 +19,7 @@ func NewAppointmentService(appointmentRepo repositories.AppointmentRepository) *
 
 func (s *AppointmentService) HasAppointmentAt(dateTime time.Time, patientID int) (bool, error) {
 	ctx := context.Background()
-	appointments, err := s.AppointmentRepo.GetByPatientID(ctx, patientID)
+	appointments, err := s.AppointmentRepo.GetAllByPatientID(ctx, patientID)
 	if err != nil {
 		return false, err
 	}
@@ -40,4 +40,13 @@ func (s *AppointmentService) CreateAppointment(dateTime time.Time, patientID int
 	}
 
 	return s.AppointmentRepo.Create(appointment)
+}
+
+func (s *AppointmentService) GetAllByPatientID(patientID int) ([]*entities.Appointment, error) {
+	ctx := context.Background()
+	appointments, err := s.AppointmentRepo.GetAllByPatientID(ctx, patientID)
+	if err != nil {
+		return nil, err
+	}
+	return appointments, nil
 }

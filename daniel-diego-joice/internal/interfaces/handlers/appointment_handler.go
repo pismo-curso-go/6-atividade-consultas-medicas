@@ -58,11 +58,22 @@ func (h *AppointmentHandler) Create(c echo.Context) error {
 	})
 }
 
-func (h *AppointmentHandler) GetByID(c echo.Context) error {
-	
-	return c.JSON(http.StatusOK, map[string]string{
-		"message": "get by id funcionando",
-	})
+func (h *AppointmentHandler) GetAllAppointmentByPatientID(c echo.Context) error {
+	var userID int = c.Get("user_id").(int)
+
+	appointments, err := h.appointmentService.GetAllByPatientID(userID)
+	if err != nil {
+		if apiErr, ok := err.(utils.APIError); ok {
+			return c.JSON(apiErr.Code, apiErr)
+		}
+		return c.JSON(http.StatusInternalServerError, utils.ErrInternalServer)
+	}
+
+	if len(appointments) == 0 {
+		return c.JSON(http.StatusNotFound, utils.ErrAppointmentNotFound)
+	}
+
+	return c.JSON(http.StatusOK, appointments)
 }
 
 func (h *AppointmentHandler) Update(c echo.Context) error {
@@ -76,8 +87,4 @@ func (h *AppointmentHandler) Delete(c echo.Context) error {
 		"message": "delete funcionando",
 	})
 }
-func (h *AppointmentHandler) GetAll(c echo.Context) error {
-	return c.JSON(http.StatusOK, map[string]string{
-		"message": "get all funcionando",
-	})
-}
+

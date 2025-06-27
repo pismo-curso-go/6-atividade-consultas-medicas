@@ -56,4 +56,9 @@ var (
 		Message: "Erro interno do servidor",
 		Code:    http.StatusInternalServerError,
 	}
+
+	ErrAppointmentNotFound = APIError{
+		Message: "Consulta não encontrada ou acesso não autorizado",
+		Code:    http.StatusNotFound,
+	}
 )
