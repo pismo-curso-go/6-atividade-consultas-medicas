@@ -35,3 +35,19 @@ func CriarPaciente(db *sql.DB, nome, email, senha string) error {
 	)
 	return err
 }
+
+func BuscarPacientePorEmail(db *sql.DB, email string) (*Paciente, error) {
+	var p Paciente
+
+	err := db.QueryRow("SELECT id, name, email, password_hash FROM pacientes WHERE email = $1", email).
+		Scan(&p.ID, &p.Nome, &p.Email, &p.PasswordHash)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New("Paciente não encontrado")
+		}
+		return nil, err
+	}
+
+	return &p, nil
+}

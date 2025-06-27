@@ -1,10 +1,12 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"os"
 	"saudemais-api/internal/database"
 	"saudemais-api/internal/handlers"
+	"saudemais-api/internal/middleware"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -27,8 +29,8 @@ func main() {
 	e := echo.New()
 
 	e.POST("/register", handlers.Register(db))
-    e.POST("/login", handlers.Login(db))
-	// e.POST("/appointments", handlers.AgendarConsulta(db), middleware.Auth(db))
+	e.POST("/login", handlers.Login(db))
+	e.POST("/appointments", handlers.AgendarConsulta(db), middleware.AutenticarJWT())
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -38,4 +40,14 @@ func main() {
 	log.Printf("Servidor ouvindo na porta %s...", port)
 	e.Logger.Fatal(e.Start(":" + port))
 
+}
+
+func registrarRotas(e *echo.Echo, db *sql.DB) {
+	e.POST("/register", handlers.Register(db))
+	e.POST("/login", handlers.Login(db))
+
+	// grupoProtegido := e.Group("/appointments", middleware.AutenticarJWT())
+	// grupoProtegido.POST("", handlers.AgendarConsulta(db))
+	// grupoProtegido.GET("", handlers.ListarConsultas(db))
+	// grupoProtegido.DELETE("/:id", handlers.CancelarConsulta(db))
 }
