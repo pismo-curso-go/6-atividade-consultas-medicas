@@ -1,53 +1,36 @@
 package main
 
 import (
-	"database/sql"
+	"fmt"
 	"log"
 	"os"
 	"saudemais-api/internal/database"
-	"saudemais-api/internal/handlers"
-	"saudemais-api/internal/middleware"
+	"saudemais-api/internal/router"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
 
-func init() {
+func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Println("Arquivo .env não encontrado. Variáveis de ambiente devem estar no sistema.")
+		log.Println("Arquivo .env não encontrado")
 	}
-}
 
-func main() {
 	db, err := database.Connect()
 	if err != nil {
-		log.Fatalf("Erro ao conectar com o banco: %v", err)
+		log.Fatal("Erro ao conectar com o banco:", err)
 	}
-	defer db.Close()
 
 	e := echo.New()
 
-	e.POST("/register", handlers.Register(db))
-	e.POST("/login", handlers.Login(db))
-	e.POST("/appointments", handlers.AgendarConsulta(db), middleware.AutenticarJWT())
+	router.SetupRoutes(e, db)
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8000"
 	}
 
-	log.Printf("Servidor ouvindo na porta %s...", port)
+	fmt.Println("Servidor rodando na porta", port)
 	e.Logger.Fatal(e.Start(":" + port))
-
-}
-
-func registrarRotas(e *echo.Echo, db *sql.DB) {
-	e.POST("/register", handlers.Register(db))
-	e.POST("/login", handlers.Login(db))
-
-	// grupoProtegido := e.Group("/appointments", middleware.AutenticarJWT())
-	// grupoProtegido.POST("", handlers.AgendarConsulta(db))
-	// grupoProtegido.GET("", handlers.ListarConsultas(db))
-	// grupoProtegido.DELETE("/:id", handlers.CancelarConsulta(db))
 }
