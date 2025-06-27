@@ -134,12 +134,3 @@ func Login(db *sql.DB) echo.HandlerFunc {
 		})
 	}
 }
-
-func AgendarConsulta(db *sql.DB) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		email := c.Get("userEmail").(string)
-		return c.JSON(http.StatusOK, map[string]string{
-			"usuario_logado": email,
-		})
-	}
-}
