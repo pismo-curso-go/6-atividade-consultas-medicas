@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "58010182-f794-4aa4-9c42-93744baf3421",
+		"_postman_id": "11118e00-7ca1-434a-8ae2-8897726095d7",
 		"name": "SaudeMais",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20442892"
+		"_exporter_id": "40445801"
 	},
 	"item": [
 		{
@@ -57,6 +57,78 @@
 					"port": "8000",
 					"path": [
 						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create new appointment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1LCJleHAiOjE3NTExMzQ0MjEsIm5iZiI6MTc1MTA0ODAyMSwiaWF0IjoxNzUxMDQ4MDIxfQ.JK3dz64hDHSv5SAdHgHqlTindWL2C1oeiZHnQnSETwE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date_time\": \"2025-08-11T14:00:00Z\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/appointments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all patient appointments",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1LCJleHAiOjE3NTExMzQ0MjEsIm5iZiI6MTc1MTA0ODAyMSwiaWF0IjoxNzUxMDQ4MDIxfQ.JK3dz64hDHSv5SAdHgHqlTindWL2C1oeiZHnQnSETwE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/appointments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"appointments"
 					]
 				}
 			},
