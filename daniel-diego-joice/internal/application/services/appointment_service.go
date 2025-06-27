@@ -33,12 +33,11 @@ func (s *AppointmentService) HasAppointmentAt(dateTime time.Time, patientID int)
 }
 
 func (s *AppointmentService) CreateAppointment(dateTime time.Time, patientID int) error {
-	ctx := context.Background()
 
 	appointment := &entities.Appointment{
 		PatientID: patientID,
 		DateTime:  dateTime,
 	}
 
-	return s.AppointmentRepo.Create(ctx, appointment)
+	return s.AppointmentRepo.Create(appointment)
 }

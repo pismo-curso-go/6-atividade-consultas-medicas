@@ -28,7 +28,7 @@ var (
 	}
 
 	ErrValidationFailed = APIError{
-		Message: "Falha na validação",
+		Message: "Falha na validação do corpo da requisição",
 		Code:    http.StatusBadRequest,
 	}
 

@@ -23,6 +23,9 @@ func NewAppointmentHandler(appointmentService *services.AppointmentService) *App
 
 func (h *AppointmentHandler) Create(c echo.Context) error {
 	var req dto.CreateAppointmentRequest
+	var userID int = c.Get("user_id").(int)
+
+	req.PatientID = userID
 
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(utils.ErrValidationFailed.Code, utils.ErrValidationFailed)
@@ -37,10 +40,7 @@ func (h *AppointmentHandler) Create(c echo.Context) error {
 		return c.JSON(utils.ErrPastAppointment.Code, utils.ErrPastAppointment)
 	}
 
-	user := c.Get("user").(dto.JWTClaims)
-	patientID := user.UserID
-
-	hasConflict, err := h.appointmentService.HasAppointmentAt(req.DateTime, patientID)
+	hasConflict, err := h.appointmentService.HasAppointmentAt(req.DateTime, req.PatientID)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.ErrInternalServer)
 	}
@@ -48,7 +48,7 @@ func (h *AppointmentHandler) Create(c echo.Context) error {
 		return c.JSON(utils.ErrAppointmentConflict.Code, utils.ErrAppointmentConflict)
 	}
 
-	err = h.appointmentService.CreateAppointment(req.DateTime, patientID)
+	err = h.appointmentService.CreateAppointment(req.DateTime, req.PatientID)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, utils.ErrInternalServer)
 	}
@@ -59,6 +59,7 @@ func (h *AppointmentHandler) Create(c echo.Context) error {
 }
 
 func (h *AppointmentHandler) GetByID(c echo.Context) error {
+	
 	return c.JSON(http.StatusOK, map[string]string{
 		"message": "get by id funcionando",
 	})

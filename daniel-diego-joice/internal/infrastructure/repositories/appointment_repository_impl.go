@@ -16,19 +16,12 @@ func NewAppointmentRepository(db *sql.DB) repositories.AppointmentRepository {
 	return &appointmentRepositoryImpl{db: db}
 }
 
-func (r *appointmentRepositoryImpl) Create(ctx context.Context, appointment *entities.Appointment) error {
+func (r *appointmentRepositoryImpl) Create(appointment *entities.Appointment) error {
 	query := `
 		INSERT INTO appointment (patient_id, date_time)
 		VALUES ($1, $2)
-		RETURNING id
 		`
-	err := r.db.QueryRowContext(
-		ctx,
-		query,
-		appointment.PatientID,
-		appointment.DateTime,
-	).Scan(&appointment.ID)
-
+	_, err := r.db.Exec(query, appointment.PatientID, appointment.DateTime)
 	if err != nil {
 		log.Printf("Erro ao criar consulta: %v", err)
 		return err
