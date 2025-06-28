@@ -18,7 +18,7 @@ func main() {
 		env,
 	)
 
-	err := initRoutes(e, *diContainer)
+	err := InitRoutes(e, *diContainer)
 	if err != nil {
 		log.Fatal("Erro ao iniciar as rotas da API")
 	}

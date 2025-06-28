@@ -5,3 +5,8 @@ type RegisterPatientRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
+
+type LoginPatientRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}

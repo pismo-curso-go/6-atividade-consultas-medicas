@@ -31,14 +31,14 @@ func InitEnvVariables() *EnvVariables {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3000"
+		log.Fatal("PORT environment variable is required")
 	}
 
 	dbVariables := initDatabaseVariables()
 
 	jwtSecret := os.Getenv("JWT_SECRET")
 	if jwtSecret == "" {
-		jwtSecret = "dev-secret"
+		log.Fatal("JWT_SECRET environment variable is required")
 	}
 
 	return &EnvVariables{
@@ -52,29 +52,33 @@ func (ev *EnvVariables) Port() string {
 	return ev.port
 }
 
+func (ev *EnvVariables) JwtSecret() string {
+	return ev.jwtSecret
+}
+
 func initDatabaseVariables() *DatabaseVariables {
 	dbHost := os.Getenv("DB_HOST")
 	if dbHost == "" {
-		dbHost = "localhost"
+		log.Fatal("DB_HOST environment variable is required")
 	}
 	dbUser := os.Getenv("DB_USER")
 	if dbUser == "" {
-		dbUser = "postgres"
+		log.Fatal("DB_USER environment variable is required")
 	}
 
 	dbPassword := os.Getenv("DB_PASSWORD")
 	if dbPassword == "" {
-		dbPassword = "postgres"
+		log.Fatal("DB_PASSWORD environment variable is required")
 	}
 
 	dbName := os.Getenv("DB_NAME")
 	if dbName == "" {
-		dbName = "health_clinic_db"
+		log.Fatal("DB_NAME environment variable is required")
 	}
 
 	dbPort := os.Getenv("DB_PORT")
 	if dbPort == "" {
-		dbPort = "5432"
+		log.Fatal("DB_PORT environment variable is required")
 	}
 
 	return &DatabaseVariables{

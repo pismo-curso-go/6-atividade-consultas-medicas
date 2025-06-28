@@ -26,6 +26,14 @@ func (p *PatientUseCase) CreatePatientUseCase(ctx context.Context, name, passwor
 		password = hashedPw
 	}
 
+	existing, err := p.repository.FindByEmail(ctx, email)
+	if err != nil {
+		return err
+	}
+	if existing != nil {
+		return patients.ErrPatientAlreadyExists
+	}
+
 	newPatient := patients.NewPatientDomain(name, email, password)
 	if err := newPatient.Validate(); err != nil {
 		return err
@@ -36,4 +44,18 @@ func (p *PatientUseCase) CreatePatientUseCase(ctx context.Context, name, passwor
 	}
 
 	return nil
+}
+
+func (p *PatientUseCase) LoginPatientUseCase(ctx context.Context, email, password string) (*patients.PatientDomain, error) {
+	patient, err := p.repository.FindByEmail(ctx, email)
+	if err != nil {
+		return nil, err
+	}
+	if patient == nil {
+		return nil, patients.ErrPatientInvalidPassword
+	}
+	if err := config.Compare(patient.Password(), password); err != nil {
+		return nil, patients.ErrPatientInvalidPassword
+	}
+	return patient, nil
 }

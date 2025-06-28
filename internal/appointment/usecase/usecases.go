@@ -37,6 +37,18 @@ func (a *AppointmentUseCase) ListByPatientID(ctx context.Context, patientID int)
 }
 
 func (a *AppointmentUseCase) Create(ctx context.Context, patientID int, date time.Time) error {
+	if date.Before(time.Now()) {
+		return appointment.ErrAppointmentInvalidDate
+	}
+
+	conflict, err := a.repository.ExistsByPatientIDAndDate(ctx, patientID, date)
+	if err != nil {
+		return err
+	}
+	if conflict {
+		return appointment.ErrAppointmentDoubleBooking
+	}
+
 	appointment, err := appointment.NewAppointmentDomain(0, date, patientID)
 	if err != nil {
 		return err
@@ -47,4 +59,15 @@ func (a *AppointmentUseCase) Create(ctx context.Context, patientID int, date tim
 	}
 
 	return nil
+}
+
+func (a *AppointmentUseCase) Cancel(ctx context.Context, patientID, appointmentID int) error {
+	found, err := a.repository.FindByIDAndPatientID(ctx, appointmentID, patientID)
+	if err != nil {
+		return err
+	}
+	if !found {
+		return appointment.ErrAppointmentNotFoundOrUnauthorized
+	}
+	return a.repository.Delete(ctx, appointmentID)
 }

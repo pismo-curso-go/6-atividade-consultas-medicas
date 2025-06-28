@@ -19,6 +19,15 @@ func NewPatientDomain(
 	}
 }
 
+func NewPatientDomainFromDB(id int, name, email, password string) *PatientDomain {
+	return &PatientDomain{
+		id:       id,
+		name:     name,
+		email:    email,
+		password: password,
+	}
+}
+
 func (p *PatientDomain) ID() int {
 	return p.id
 }

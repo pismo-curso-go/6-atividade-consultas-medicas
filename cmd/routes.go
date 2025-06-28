@@ -13,17 +13,23 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func initRoutes(e *echo.Echo, diContainer config.DIContainer) error {
+func InitRoutes(e *echo.Echo, diContainer config.DIContainer) error {
 	pRepo := patientRepository.NewPatientRepository(diContainer.DbInstance())
 	pUseCase := patientUseCase.NewPatientUseCase(pRepo)
-	pController := patientController.NewPatientController(pUseCase)
+	pController := patientController.NewPatientController(pUseCase, diContainer.Env())
 	e.POST("register", pController.RegisterPacient)
+	e.POST("login", pController.Login)
 
 	aRepo := appointmentRepository.NewAppointmentRepository(diContainer.DbInstance())
 	aUseCase := appointmentUseCase.NewAppointmentUseCase(aRepo)
 	aController := appointmentController.NewAppointmentController(aUseCase)
-	e.GET("/:patient_id/all", aController.ListByPatientID)
-	e.POST("/:patient_id", aController.Create)
+
+	jwtMiddleware := config.JWTMiddleware(diContainer.Env().JwtSecret())
+
+	appointments := e.Group("/appointments", jwtMiddleware)
+	appointments.GET("", aController.ListByPatientID)
+	appointments.POST("", aController.Create)
+	appointments.DELETE("/:id", aController.Cancel)
 
 	return nil
 }
