@@ -20,6 +20,6 @@ func SetupRoutes(e *echo.Echo, db *sql.DB) {
 	appointments := e.Group("/appointments")
 	appointments.Use(jwtMid)
 	appointments.POST("", handlers.AgendarConsulta(db))
-	// appointments.GET("", handlers.ListarConsulta(db))
-	// appointments.DELETE("/:id", handlers.CancelarConsulta(db))
+	appointments.GET("", handlers.ListarConsulta(db))
+	appointments.DELETE("/:id", handlers.CancelarConsulta(db))
 }

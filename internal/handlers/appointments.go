@@ -5,13 +5,14 @@ import (
 	"net/http"
 	"saudemais-api/internal/models"
 	"time"
-
+	"strconv"
 	"github.com/labstack/echo/v4"
 )
 
 type AgendarRequest struct {
 	Datetime string `json:"datetime"`
 }
+
 
 func AgendarConsulta(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -85,6 +86,106 @@ func AgendarConsulta(db *sql.DB) echo.HandlerFunc {
 		return c.JSON(http.StatusCreated, map[string]interface{}{
 			"message": "Consulta agendada com sucesso",
 			"code":    201,
+		})
+	}
+
+}
+
+func ListarConsulta(db *sql.DB) echo.HandlerFunc {
+
+	return func(c echo.Context) error {
+		email, ok := c.Get("userEmail").(string)
+		if !ok || email == "" {
+			return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+				"message": "Usuário não autenticado",
+				"code":    401,
+			})
+		}
+
+		paciente, err := models.BuscarPacientePorEmail(db, email)
+		if err != nil {
+			return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+				"message": "Paciente não encontrado",
+				"code":    401,
+			})
+		}
+
+		consultas, err := models.ListaConsultasPorPaciente(db, paciente.ID)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"message": "Erro ao listar consultas",
+				"code":    500,
+			})
+		}
+
+		// Define a struct de resposta formatada
+		type ConsultaResponse struct {
+			ID       int    `json:"id"`
+			Datetime string `json:"datetime"`
+		}
+
+		var resposta []ConsultaResponse
+		for _, consulta := range consultas {
+			resposta = append(resposta, ConsultaResponse{
+				ID:       consulta.ID,
+				Datetime: consulta.Datetime.Format("2006-01-02 15:04:05"),
+			})
+		}
+
+		return c.JSON(http.StatusOK, resposta)
+	}
+}
+
+func CancelarConsulta(db *sql.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// Pega o email do paciente autenticado
+		email, ok := c.Get("userEmail").(string)
+		if !ok || email == "" {
+			return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+				"message": "Usuário não autenticado",
+				"code":    401,
+			})
+		}
+
+		// Busca o paciente pelo e-mail
+		paciente, err := models.BuscarPacientePorEmail(db, email)
+		if err != nil {
+			return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+				"message": "Paciente não encontrado",
+				"code":    401,
+			})
+		}
+
+		// Converte o ID da consulta (rota: /appointments/:id)
+		idStr := c.Param("id")
+		consultaID, err := strconv.Atoi(idStr)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"message": "ID inválido",
+				"code":    400,
+			})
+		}
+
+		// Cancela a consulta no banco de dados
+		result, err := db.Exec("DELETE FROM consultas WHERE id = $1 AND patient_id = $2", consultaID, paciente.ID)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"message": "Erro ao cancelar consulta",
+				"code":    500,
+			})
+		}
+
+		rowsAffected, _ := result.RowsAffected()
+		if rowsAffected == 0 {
+			return c.JSON(http.StatusNotFound, map[string]interface{}{
+				"message": "Consulta não encontrada ou não pertence ao paciente",
+				"code":    404,
+			})
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "Consulta cancelada com sucesso",
+			"code":    200,
 		})
 	}
 }
