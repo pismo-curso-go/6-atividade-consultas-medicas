@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"saude-mais/internal/application/services"
 	"saude-mais/internal/config"
@@ -25,6 +26,8 @@ func main() {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	defer db.Close()
+
+	fmt.Println("🚨 JWT SECRET carregada:", cfg.JWT.Secret)
 
 	patientRepo := repositories.NewPatientRepository(db)
 	appointmentRepo := repositories.NewAppointmentRepository(db)
