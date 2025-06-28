@@ -1,7 +1,7 @@
 # Tasks
 
 ## Autenticação
-[] - Login - {nome}
+[x] - Login - {nome}
 
 ## Pacientes
 [X] - Cadastro de pacientes - {Paulo}
@@ -10,4 +10,4 @@
 ## Consultas
 [X] - Listar consultas - {Paulo}
 [X] - Agendar consulta - {Paulo}
-[] - Cancelar consulta - {nome}
+[x] - Cancelar consulta - {nome}
