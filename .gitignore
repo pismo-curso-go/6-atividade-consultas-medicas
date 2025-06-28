@@ -1,0 +1,8 @@
+
+.env
+.env.*
+*.env
+
+*.pid
+*.tar
+docker-compose.override.yml
