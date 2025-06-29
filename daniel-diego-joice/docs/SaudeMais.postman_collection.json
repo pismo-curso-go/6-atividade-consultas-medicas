@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "11118e00-7ca1-434a-8ae2-8897726095d7",
+		"_postman_id": "e967419d-086b-4af7-8fda-8054518d0b12",
 		"name": "SaudeMais",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "40445801"
+		"_exporter_id": "20442892"
 	},
 	"item": [
 		{
@@ -129,6 +129,80 @@
 					"port": "8000",
 					"path": [
 						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update new appointment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1LCJleHAiOjE3NTEzMDc0NTcsIm5iZiI6MTc1MTIyMTA1NywiaWF0IjoxNzUxMjIxMDU3fQ.1_Jz01Z6NS1ZU2Id8KUt9qMzq-r67jo-lz6EZphURdc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date_time\": \"2025-08-12T14:00:00Z\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/appointments/10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"appointments",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete patient appointments",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo2LCJleHAiOjE3NTEzMDc3OTksIm5iZiI6MTc1MTIyMTM5OSwiaWF0IjoxNzUxMjIxMzk5fQ.d8hckGI4MX3ZrAILkOMIyQ2WXFkk9aX87rDukMHhtMk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/appointments/13",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"appointments",
+						"13"
 					]
 				}
 			},
