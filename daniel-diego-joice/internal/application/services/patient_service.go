@@ -19,7 +19,6 @@ func NewPatientService(patientRepo repositories.PatientRepository) *PatientServi
 }
 
 func (s *PatientService) Register(ctx context.Context, req *dto.RegisterPatientRequest) error {
-	// Check if the email already exists
 	exists, err := s.patientRepo.EmailExists(ctx, req.Email)
 	if err != nil {
 		return err
@@ -28,18 +27,18 @@ func (s *PatientService) Register(ctx context.Context, req *dto.RegisterPatientR
 		return utils.ErrPatientAlreadyExists
 	}
 
-	// Password hash BEFORE creating the patient
 	hashedPassword, err := utils.HashPassword(req.Password)
 	if err != nil {
 		return err
 	}
-
-	// Create the patient with the hashed password
 	patient := &entities.Patient{
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: hashedPassword,
 	}
-
 	return s.patientRepo.Create(ctx, patient)
+}
+
+func (s *PatientService) Delete(id string) error {
+	return s.patientRepo.Delete(id)
 }

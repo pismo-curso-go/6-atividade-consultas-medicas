@@ -1,11 +1,13 @@
 package handlers
 
 import (
-	"github.com/labstack/echo/v4"
+	"fmt"
 	"net/http"
 	"saude-mais/internal/application/dto"
 	"saude-mais/internal/application/services"
 	"saude-mais/internal/utils"
+
+	"github.com/labstack/echo/v4"
 )
 
 type PatientHandler struct {
@@ -26,7 +28,6 @@ func (h *PatientHandler) Register(c echo.Context) error {
 		return c.JSON(utils.ErrValidationFailed.Code, utils.ErrValidationFailed)
 	}
 
-	// Basic validation
 	if req.Name == "" || req.Email == "" || req.Password == "" {
 		return c.JSON(utils.ErrValidationFailed.Code, utils.ErrValidationFailed)
 	}
@@ -54,21 +55,15 @@ func (h *PatientHandler) Register(c echo.Context) error {
 func (h *PatientHandler) Login(c echo.Context) error {
 	var req dto.LoginRequest
 	if err := c.Bind(&req); err != nil {
-		return c.JSON(utils.ErrValidationFailed.Code, utils.ErrValidationFailed)
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request"})
 	}
 
-	// Basic validation
-	if req.Email == "" || req.Password == "" {
-		return c.JSON(utils.ErrValidationFailed.Code, utils.ErrValidationFailed)
-	}
-
-	response, err := h.authService.Login(c.Request().Context(), &req)
+	loginResp, err := h.authService.Login(c.Request().Context(), &req)
 	if err != nil {
-		if apiErr, ok := err.(utils.APIError); ok {
-			return c.JSON(apiErr.Code, apiErr)
-		}
-		return err
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "invalid credentials"})
 	}
 
-	return c.JSON(http.StatusOK, response)
+	fmt.Println("🚀 Token gerado:", loginResp.Token)
+
+	return c.JSON(http.StatusOK, loginResp)
 }

@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
 	"saude-mais/internal/domain/entities"
 	"saude-mais/internal/domain/repositories"
@@ -111,4 +112,15 @@ func (r *patientRepositoryImpl) EmailExists(ctx context.Context, email string) (
 	}
 
 	return exists, nil
+}
+
+func (r *patientRepositoryImpl) Delete(id string) error {
+	query := `DELETE FROM patients WHERE id = $1`
+
+	_, err := r.db.Exec(query, id)
+	if err != nil {
+		return fmt.Errorf("failed to delete patient: %w", err)
+	}
+
+	return nil
 }

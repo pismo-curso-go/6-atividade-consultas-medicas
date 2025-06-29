@@ -21,6 +21,8 @@ func InitRoutes(
 
 	protected.POST("/appointments", appointmentHandler.Create)
 	protected.GET("/appointments", appointmentHandler.GetAllAppointmentByPatientID)
+	protected.GET("/appointments/:id", appointmentHandler.GetByID)
 	protected.PUT("/appointments/:id", appointmentHandler.Update)
+	protected.PATCH("/appointments/:id", appointmentHandler.Update)
 	protected.DELETE("/appointments/:id", appointmentHandler.Delete)
 }

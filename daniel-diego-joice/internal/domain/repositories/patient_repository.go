@@ -10,4 +10,5 @@ type PatientRepository interface {
 	GetByEmail(ctx context.Context, email string) (*entities.Patient, error)
 	GetByID(ctx context.Context, id int) (*entities.Patient, error)
 	EmailExists(ctx context.Context, email string) (bool, error)
+	Delete(id string) error
 }

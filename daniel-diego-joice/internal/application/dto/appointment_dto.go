@@ -13,6 +13,9 @@ type CreateAppointmentRequest struct {
 	DateTime  time.Time `json:"date_time" validate:"required"`
 }
 
+type UpdateAppointmentRequest struct {
+	DateTime time.Time `json:"date_time"`
+}
 type CreateAppointmentResponse struct {
 	ID        int       `json:"id"`
 	PatientID int       `json:"patient_id"`

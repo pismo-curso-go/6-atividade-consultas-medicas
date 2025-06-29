@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"saude-mais/internal/utils"
 	"strings"
 
@@ -14,8 +15,8 @@ func JWTMiddleware(jwtSecret string) echo.MiddlewareFunc {
 			if authHeader == "" {
 				return c.JSON(utils.ErrInvalidToken.Code, utils.ErrInvalidToken)
 			}
-
-			// Extract token from "Bearer <token>"
+			fmt.Println("🔐 JWT recebido:", authHeader)
+			fmt.Println("🔑 Secret usada:", jwtSecret)
 			parts := strings.Split(authHeader, " ")
 			if len(parts) != 2 || parts[0] != "Bearer" {
 				return c.JSON(utils.ErrInvalidToken.Code, utils.ErrInvalidToken)
@@ -27,7 +28,6 @@ func JWTMiddleware(jwtSecret string) echo.MiddlewareFunc {
 				return c.JSON(utils.ErrInvalidToken.Code, utils.ErrInvalidToken)
 			}
 
-			// Store user ID in context
 			c.Set("user_id", claims.UserID)
 			return next(c)
 		}

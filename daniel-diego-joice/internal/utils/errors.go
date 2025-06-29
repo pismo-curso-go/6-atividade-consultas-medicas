@@ -61,4 +61,9 @@ var (
 		Message: "Consulta não encontrada ou acesso não autorizado",
 		Code:    http.StatusNotFound,
 	}
+
+	ErrForbidden = APIError{
+		Code:    403,
+		Message: "Você não tem permissão para acessar este recurso.",
+	}
 )
