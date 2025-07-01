@@ -1,15 +1,46 @@
 package main
 
 import (
-	"net/http"
+	"log"
+	"saudemais-api/database"
+	"saudemais-api/handlers"
+	authMiddleware "saudemais-api/middleware"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
+	if err := godotenv.Load(".env"); err != nil {
+		log.Println("Aviso: arquivo .env não encontrado.")
+	}
+
 	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
-	e.Logger.Fatal(e.Start(":3000"))
+
+	// Conexão com o banco de dados
+	database.Connect()
+
+	// Middlewares
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	// Rotas Públicas (não exigem autenticação)
+	e.POST("/register", handlers.RegisterPatient)
+	e.POST("/login", handlers.Login)
+
+	// Grupo de rotas protegidas que exigem token JWT
+	appointmentsGroup := e.Group("/appointments")
+	appointmentsGroup.Use(authMiddleware.JWTMiddleware())
+
+	// Rotas Protegidas
+	appointmentsGroup.POST("", handlers.CreateAppointment)
+	appointmentsGroup.GET("", handlers.ListAppointments)
+	appointmentsGroup.DELETE("/:id", handlers.CancelAppointment)
+
+	log.Println("Servidor iniciando na porta 3000...")
+	// Inicia o servidor na porta 3000, conforme definido no Dockerfile
+	if err := e.Start(":3000"); err != nil {
+		log.Fatalf("Não foi possível iniciar o servidor: %v", err)
+	}
 }
