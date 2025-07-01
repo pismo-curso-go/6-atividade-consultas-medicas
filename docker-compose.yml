@@ -1,5 +1,5 @@
 services:
-  # API da Aplicação Go
+
   app:
     build: . # Constrói a imagem a partir do Dockerfile na raiz
     container_name: saudemais_api
