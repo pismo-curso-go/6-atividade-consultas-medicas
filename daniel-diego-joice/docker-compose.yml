@@ -38,16 +38,9 @@ services:
     container_name: daniel-diego-joice-api
     restart: always
     ports: 
-      - "3000:3000"
+      - "8000:8000"
     depends_on:
       - postgres
-    environment:
-      DB_HOST: localhost
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: saude_mais_db
-      DB_PORT: 5432
-      JWT_SECRET: secret-key
 
 volumes:
   postgres_data:

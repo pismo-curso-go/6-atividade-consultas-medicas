@@ -11,6 +11,6 @@ COPY . .
 
 RUN go build -o main ./cmd/main.go
 
-EXPOSE 3000
+EXPOSE 8000
 
 CMD [ "./main" ]
