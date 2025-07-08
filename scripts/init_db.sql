@@ -1,0 +1,12 @@
+CREATE TABLE patients (
+    id SERIAL PRIMARY KEY NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE appointments (
+    id SERIAL PRIMARY KEY NOT NULL UNIQUE,
+    patient_id INTEGER NOT NULL REFERENCES patients(id),
+    date TIMESTAMP NOT NULL
+);
