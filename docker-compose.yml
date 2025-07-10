@@ -1,7 +1,7 @@
-version: '3'
+version: '3.9'
 
 services:
-  # PostgreSQL Database
+  # Banco de Dados PostgreSQL
   postgres:
     image: postgres:13-alpine
     container_name: echo-clean-database
@@ -14,13 +14,30 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data    
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgree/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     shm_size: 256mb
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d echo_clean_db"]
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # Backend Go
+  saudemais-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: saudemais-backend
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    command: ["./server"]
 
   # Adminer - Interface Web para administração
   adminer:
